@@ -14,11 +14,11 @@ class OrderItems extends Model {
     static get relationMappings() {
 
         const Order = require('./orders')
-        const MenuItems = require('');
+        const MenuItems = require('./menuItems');
 
         return {
             orders: {
-                relation: Model.HasManyRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: Order,
                 join: {
                     from: 'orderItems.orderId',
@@ -26,7 +26,7 @@ class OrderItems extends Model {
                 }
             },
             menuItems: {
-                relation: Model.ManyToManyRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: MenuItems,
                 join: {
                     from: 'orderItems.menuItemId',
@@ -41,9 +41,9 @@ class OrderItems extends Model {
             type: 'object',
             required: ["orderId", "menuItemId", "quantity", "itemPrice", "total"],
             properties: {
-                id: { type: 'string', formar: 'uuid' },
-                orderId: { type: 'string', formar: 'uuid' },
-                menuItemId: { type: 'string', formar: 'uuid' },
+                id: { type: 'string', format: 'uuid' },
+                orderId: { type: 'string', format: 'uuid' },
+                menuItemId: { type: 'string', format: 'uuid' },
                 quantity: { type: 'number' },
                 itemPrice: { type: 'number' },
                 total: { type: 'number' },

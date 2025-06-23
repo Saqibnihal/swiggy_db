@@ -14,11 +14,11 @@ class OrderStatuses extends Model {
     static get relationMappings() {
 
         const Order = require('./orders')
-        const orderStatusHistory = require('');
+        const orderStatusHistory = require('./orderStatusHistory');
 
         return {
             orders: {
-                relation: Model.BelongsToOneRelation,
+                relation: Model.HasManyRelation,
                 modelClass: Order,
                 join: {
                     from: 'orderStatuses.id',
@@ -26,7 +26,7 @@ class OrderStatuses extends Model {
                 }
             },
             orderStatusHistories: {
-                relation: Model.ManyToManyRelation,
+                relation: Model.HasManyRelation,
                 modelClass: orderStatusHistory,
                 join: {
                     from: 'orderStatuses.id',
@@ -41,7 +41,7 @@ class OrderStatuses extends Model {
             type: 'object',
             required: ["code", "label", "orderIndex"],
             properties: {
-                id: { type: 'string', formar: 'uuid' },
+                id: { type: 'string', format: 'uuid' },
                 code: { type: 'string' },
                 label: { type: 'string' },
                 orderIndex: { type: 'number' },
