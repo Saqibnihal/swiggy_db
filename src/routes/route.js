@@ -1,5 +1,8 @@
 const express = require("express");
 const { GetOrderItems, CreateOrderItems, UpdateOrderItems, DeleteOrderItems } = require("../controller/orderItems");
+const { getUser, createUser, updateUser, deleteUser } = require("../controller/user");
+const { getAllMenuItems, createmenuItems } = require("../controller/menuItem");
+const { getRestaurants, getRestaurantById, createRestaurants, updateRestaurants, deleteRestaurant } = require("../controller/restaurant");
 const router = express.Router();
 
 //user table
