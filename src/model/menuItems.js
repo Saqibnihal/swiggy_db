@@ -1,16 +1,9 @@
-const { Model } = require("objection");
-const { v4: uuidv4 } = require("uuid");
-
-
-class MenuItems extends Model {
+const Uuid = require("./constants/uuid");
+class MenuItems extends Uuid {
     static get tableName() {
         return 'menuItems'
     }
-    $beforeInsert() {
-        if (!this.id) {
-            this.id = uuidv4();
-        }
-    }
+
     static get jsonSchema() {
         return {
             type: 'object',
@@ -32,7 +25,7 @@ class MenuItems extends Model {
         const Restaurants = require('./restaurant')
         return {
             restaurants: {
-                relation: Model.BelongsToOneRelation,
+                relation: Uuid.BelongsToOneRelation,
                 modelClass: Restaurants,
                 join: {
                     from: 'menuItems.restaurantId',

@@ -1,15 +1,11 @@
-const { Model } = require("objection");
-const { v4: uuidv4 } = require("uuid");
+const Uuid = require('./constants/uuid');
 
-
-class OrderStatusHistory extends Model {
+class OrderStatusHistory extends Uuid {
     static get tableName() {
         return 'orderStatusHistory'
     }
-    $beforeInsert() {
-        if (!this.id) {
-            this.id = uuidv4();
-        }
+    $beforeInsert(context) {
+        super.$beforeInsert(context); 
         if (!this.changedAt) {
             this.changedAt = Date.now();
         }
@@ -34,7 +30,7 @@ class OrderStatusHistory extends Model {
         const Orders = require('./orders')
         return {
             status: {
-                relation: Model.BelongsToOneRelation,
+                relation: Uuid.BelongsToOneRelation,
                 modelClass: OrderStatuses,
                 join: {
                     from: 'orderStatusHistory.statusId',
@@ -42,7 +38,7 @@ class OrderStatusHistory extends Model {
                 }
             },
             orders: {
-                relation: Model.BelongsToOneRelation,
+                relation: Uuid.BelongsToOneRelation,
                 modelClass: Orders,
                 join: {
                     from: 'orderStatusHistory.orderId',

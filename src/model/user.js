@@ -1,15 +1,7 @@
-const { Model } = require("objection");
-const { v4: uuidv4 } = require("uuid");
-
-class User extends Model {
+const Uuid = require('./constants/uuid');
+class User extends Uuid {
   static get tableName() {
     return "users";
-  }
-
-  $beforeInsert() {
-    if (!this.id) {
-      this.id = uuidv4();
-    }
   }
 
   static get relationMappings() {
@@ -17,7 +9,7 @@ class User extends Model {
 
     return {
       orders: {
-        relation: Model.HasManyRelation,
+        relation: Uuid.HasManyRelation,
         modelClass: Order,
         join: {
           from: "users.id",
