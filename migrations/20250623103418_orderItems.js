@@ -2,6 +2,8 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
+
+
 exports.up = function(knex) {
   return knex.schema.createTable('orderItems',function(table){
     table.uuid('id').primary();
