@@ -88,3 +88,47 @@ exports.getRestaurantById = async (req, res) => {
         });
     }
 };
+
+exports.getRestaurantWithMenu = async (req, res) => {
+
+    try {
+        const restaurant = await Restaurant.query().withGraphFetched('menuItems')
+        if (!restaurant) {
+            return res.status(404).json({
+                message: 'Restaurant not found',
+            });
+        }
+
+        res.status(200).json({
+            message: 'All Restaurants and thier MenuItems',
+            data: restaurant
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            error: error.message,
+        });
+    }
+}
+exports.getRestaurantWithMenuById = async (req, res) => {
+
+    try {
+        const id = req.params.id
+        const restaurant = await Restaurant.query().findById(id).withGraphFetched('menuItems')
+        if (!restaurant || restaurant.length === 0) {
+            return res.status(404).json({
+                message: 'No restaurants with menu items found',
+            });
+        }
+
+        res.status(200).json({
+            message: 'Restaurants and thier MenuItems',
+            data: restaurant
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            error: error.message,
+        });
+    }
+}
