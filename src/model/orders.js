@@ -36,7 +36,7 @@ class Order extends Model {
         }
       },
       restaurant: {
-        relation: Model.HasOneRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: Restaurant,
         join: {
           from: 'orders.restaurantId',
