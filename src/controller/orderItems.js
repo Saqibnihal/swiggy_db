@@ -13,7 +13,7 @@ exports.GetOrderItems = async (req, res) => {
 exports.CreateOrderItems = async (req, res) => {
     const orderData = req.body;
     if (!orderData.orderId || !orderData.menuItemId || !orderData.quantity || !orderData.itemPrice || !orderData.total) {
-        res.status(400).json({ message: 'Fill all the fields' })
+        return res.status(400).json({ message: 'Fill all the fields' })
     }
     try {
         const datas = await orderItems.query().insert(orderData)
