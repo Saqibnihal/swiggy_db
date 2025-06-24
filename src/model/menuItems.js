@@ -14,7 +14,7 @@ class MenuItems extends Model {
     static get jsonSchema() {
         return {
             type: 'object',
-            required: ['name', 'price', 'idAvailable'],
+            required: ['name', 'price', 'isAvailable'],
             properties: {
                 id: { type: 'string', format: 'uuid' },
                 name: { type: 'string' },
