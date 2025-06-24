@@ -3,16 +3,11 @@ const { GetOrderItems, CreateOrderItems, UpdateOrderItems, DeleteOrderItems } = 
 const { GetOrderStatuses } = require("../controller/orderStatuses");
 const router = express.Router();
 
-// praveen
-router.get("/orderItems", GetOrderItems);
-router.post("/orderItems", CreateOrderItems);
-router.put("/orderItems/:id", UpdateOrderItems);
-router.delete("/orderItems/:id", DeleteOrderItems);
-
-router.get("/orderstatus", GetOrderStatuses);
-router.post("/orderstatus", GetOrderStatuses);
-router.put("/orderstatus/:id", GetOrderStatuses);
-router.delete("/orderstatus/:id", GetOrderStatuses);
+//user table
+router.get("/users",getUser);
+router.post("/users",createUser);
+router.patch("/users/:id",updateUser);
+router.delete("/users/:id",deleteUser);
 
 
 module.exports = router;
