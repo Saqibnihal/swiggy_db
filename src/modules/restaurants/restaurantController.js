@@ -1,4 +1,5 @@
 const Restaurant = require("../../model/restaurant")
+const handleError = require("../utils/errorHandling");
 
 exports.createRestaurants = async (req, res) => {
     try {
@@ -9,9 +10,7 @@ exports.createRestaurants = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+         handleError(res, error)
     }
 }
 
@@ -23,9 +22,7 @@ exports.getRestaurants = async (req, res) => {
             restaurants: get,
         })
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+         handleError(res, error)
     }
 }
 
@@ -48,9 +45,7 @@ exports.updateRestaurants = async (req, res) => {
             restaurant: update
         })
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+        handleError(res, error)
     }
 }
 
@@ -65,7 +60,7 @@ exports.deleteRestaurant = async (req, res) => {
 
         res.status(200).json({ message: 'Restaurant deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+         handleError(res, error)
     }
 };
 
@@ -83,9 +78,7 @@ exports.getRestaurantById = async (req, res) => {
             data: restaurant,
         });
     } catch (error) {
-        res.status(500).json({
-            error: error.message,
-        });
+        handleError(res, error)
     }
 };
 
@@ -105,9 +98,7 @@ exports.getRestaurantWithMenu = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(500).json({
-            error: error.message,
-        });
+         handleError(res, error)
     }
 }
 exports.getRestaurantWithMenuById = async (req, res) => {
@@ -127,8 +118,6 @@ exports.getRestaurantWithMenuById = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(500).json({
-            error: error.message,
-        });
+         handleError(res, error)
     }
 }
