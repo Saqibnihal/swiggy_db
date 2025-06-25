@@ -1,4 +1,5 @@
 const MenuItems = require("../../model/menuItems");
+const handleError = require("../utils/errorHandling");
 
 exports.createmenuItems = async (req, res) => {
     try {
@@ -9,9 +10,7 @@ exports.createmenuItems = async (req, res) => {
             menuItems: menus
         })
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+        handleError(res, error)
     }
 }
 exports.getAllMenuItems = async (req, res) => {
@@ -22,9 +21,7 @@ exports.getAllMenuItems = async (req, res) => {
             menuItems: menuItems
         })
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+         handleError(res, error)
     }
 }
 exports.getMenuItemById = async (req, res) => {
@@ -39,9 +36,7 @@ exports.getMenuItemById = async (req, res) => {
             Food: item
         })
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+         handleError(res, error)
     }
 }
 
@@ -60,9 +55,7 @@ exports.updateMenuItem = async (req, res) => {
             data: updated
         });
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+         handleError(res, error)
     }
 }
 exports.deleteMenuItem = async (req, res) => {
@@ -79,9 +72,7 @@ exports.deleteMenuItem = async (req, res) => {
             message: 'deleted menuItem'
         })
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+         handleError(res, error)
     }
 }
 
@@ -96,9 +87,7 @@ exports.getMenuWithRestaurants = async (req, res) => {
             Menus: MenuItem
         })
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+         handleError(res, error)
     }
 }
 exports.getMenuWithRestaurantsById = async (req, res) => {
@@ -113,8 +102,6 @@ exports.getMenuWithRestaurantsById = async (req, res) => {
             Menu: MenuItem
         })
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        })
+         handleError(res, error)
     }
 }
