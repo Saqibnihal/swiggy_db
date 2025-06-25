@@ -1,12 +1,13 @@
 const express = require("express");
-const { getAllMenuItems, createmenuItems, updateMenuItem, deleteMenuItem, getMenuWithRestaurants, getMenuWithRestaurantsById } = require("./menuItemController");
+const { getAllMenuItems, createmenuItems, updateMenuItem, deleteMenuItem, getMenuWithRestaurants, getMenuWithRestaurantsById, updateItemAvailability } = require("./menuItemController");
 const router = express.Router();
 
 // menuItems
-router.get('/menuItems', getAllMenuItems);
-router.post('/menuItems', createmenuItems);
-router.patch('/menuitems/:id', updateMenuItem)
-router.delete('/menuitems/:id', deleteMenuItem)
-router.get('/menuitems/restaurants', getMenuWithRestaurants)
-router.get('/menuitems/restaurants/:id', getMenuWithRestaurantsById)
+router.get('/:id/restaurants', getMenuWithRestaurantsById)
+router.patch('/:id/available', updateItemAvailability)
+router.get('/', getAllMenuItems);
+router.post('/', createmenuItems);
+router.patch('/:id', updateMenuItem)
+router.delete('/:id', deleteMenuItem)
+router.get('/restaurants', getMenuWithRestaurants)
 module.exports = router;

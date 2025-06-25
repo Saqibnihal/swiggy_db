@@ -21,7 +21,7 @@ exports.getAllMenuItems = async (req, res) => {
             menuItems: menuItems
         })
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
     }
 }
 exports.getMenuItemById = async (req, res) => {
@@ -36,7 +36,7 @@ exports.getMenuItemById = async (req, res) => {
             Food: item
         })
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
     }
 }
 
@@ -55,7 +55,7 @@ exports.updateMenuItem = async (req, res) => {
             data: updated
         });
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
     }
 }
 exports.deleteMenuItem = async (req, res) => {
@@ -72,7 +72,7 @@ exports.deleteMenuItem = async (req, res) => {
             message: 'deleted menuItem'
         })
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
     }
 }
 
@@ -87,7 +87,7 @@ exports.getMenuWithRestaurants = async (req, res) => {
             Menus: MenuItem
         })
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
     }
 }
 exports.getMenuWithRestaurantsById = async (req, res) => {
@@ -102,6 +102,31 @@ exports.getMenuWithRestaurantsById = async (req, res) => {
             Menu: MenuItem
         })
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
+    }
+}
+//check item availability Restaurant updates item availability (e.g., out of stock).
+exports.updateItemAvailability = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+        const { isAvailable } = req.body;
+        if (typeof isAvailable !== 'boolean') {
+            return res.status(400).json({
+                message: 'isAvailable must be a boolean (true or false)'
+            });
+        }
+        const item = await MenuItems.query().patchAndFetchById(id, { isAvailable })
+
+        if (!item) {
+            return res.status(400).json({ message: 'Message not Found' })
+        }
+        res.status(201).json({
+            message: "Menu item updated succesfully",
+            item
+        })
+
+    } catch (error) {
+        handleError(res, error)
     }
 }

@@ -10,7 +10,7 @@ exports.createRestaurants = async (req, res) => {
         })
 
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
     }
 }
 
@@ -22,7 +22,7 @@ exports.getRestaurants = async (req, res) => {
             restaurants: get,
         })
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
     }
 }
 
@@ -60,7 +60,7 @@ exports.deleteRestaurant = async (req, res) => {
 
         res.status(200).json({ message: 'Restaurant deleted successfully' });
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
     }
 };
 
@@ -82,42 +82,59 @@ exports.getRestaurantById = async (req, res) => {
     }
 };
 
-exports.getRestaurantWithMenu = async (req, res) => {
+// exports.getRestaurantWithMenu = async (req, res) => {
+
+//     try {
+//         const restaurant = await Restaurant.query().withGraphFetched('menuItems')
+//         if (!restaurant) {
+//             return res.status(404).json({
+//                 message: 'Restaurant not found',
+//             });
+//         }
+
+//         res.status(200).json({
+//             message: 'All Restaurants and thier MenuItems',
+//             data: restaurant
+//         })
+
+//     } catch (error) {
+//         handleError(res, error)
+//     }
+// }
+// exports.getRestaurantWithMenuById = async (req, res) => {
+
+//     try {
+//         const id = req.params.id
+//         const restaurant = await Restaurant.query().findById(id).withGraphFetched('menuItems')
+//         if (!restaurant || restaurant.length === 0) {
+//             return res.status(404).json({
+//                 message: 'No restaurants with menu items found',
+//             });
+//         }
+
+//         res.status(200).json({
+//             message: 'Restaurants and thier MenuItems',
+//             data: restaurant
+//         })
+
+//     } catch (error) {
+//         handleError(res, error)
+//     }
+// }
+exports.getOpenRestaurants = async (req, res) => {
 
     try {
-        const restaurant = await Restaurant.query().withGraphFetched('menuItems')
-        if (!restaurant) {
-            return res.status(404).json({
-                message: 'Restaurant not found',
-            });
+        const openRestaurants = await Restaurant.query().where('isOpen', true)
+
+        if (!openRestaurants.length) {
+            return res.status(400).json({ message: 'There is no Restaurants Opened' })
         }
-
-        res.status(200).json({
-            message: 'All Restaurants and thier MenuItems',
-            data: restaurant
+        res.status(201).json({
+            message: 'indha restaurant ellam open la iruku order pannunga',
+            restaurants: openRestaurants
         })
-
     } catch (error) {
-         handleError(res, error)
+        handleError(res, error)
     }
-}
-exports.getRestaurantWithMenuById = async (req, res) => {
 
-    try {
-        const id = req.params.id
-        const restaurant = await Restaurant.query().findById(id).withGraphFetched('menuItems')
-        if (!restaurant || restaurant.length === 0) {
-            return res.status(404).json({
-                message: 'No restaurants with menu items found',
-            });
-        }
-
-        res.status(200).json({
-            message: 'Restaurants and thier MenuItems',
-            data: restaurant
-        })
-
-    } catch (error) {
-         handleError(res, error)
-    }
 }
