@@ -1,4 +1,5 @@
 const BaseModel = require("./constants/BaseModel");
+const { uuidField, number } = require("./constants/type");
 class OrderItems extends BaseModel {
     static get tableName() {
         return 'orderItems'
@@ -34,12 +35,12 @@ class OrderItems extends BaseModel {
             type: 'object',
             required: ["orderId", "menuItemId", "quantity", "itemPrice", "total"],
             properties: {
-                id: { type: 'string', format: 'uuid' },
-                orderId: { type: 'string', format: 'uuid' },
-                menuItemId: { type: 'string', format: 'uuid' },
-                quantity: { type: 'number' },
-                itemPrice: { type: 'number' },
-                total: { type: 'number' },
+                id: uuidField,
+                orderId: uuidField,
+                menuItemId: uuidField,
+                quantity: number,
+                itemPrice: number,
+                total: number,
             }
         }
     }
