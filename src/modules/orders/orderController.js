@@ -1,12 +1,12 @@
-
 const OrderItems = require('../../model/orderItems')
+const handleError = require("../utils/errorHandling");
 
 exports.getOrderItems = async (req, res) => {
     try {
         const orderData = await OrderItems.query();
         res.status(200).json({ message: "Successfully Fetched Order Items", orderData })
     } catch (error) {
-        res.status(500).json({ message: "Error in Fetching Order Items", error: error.message })
+         handleError(res, error)
     }
 }
 
@@ -19,7 +19,7 @@ exports.createOrderItem = async (req, res) => {
         const datas = await OrderItems.query().insert(orderData)
         res.status(200).json({ message: 'Successfully Created Order Items', datas })
     } catch (error) {
-        res.status(500).json({ message: "Error in Creating Order Items", error: error.message })
+        handleError(res, error)
     }
 }
 
@@ -33,7 +33,7 @@ exports.updateOrderItem = async (req, res) => {
         }
         res.status(200).json({ message: 'Successfully Updated Order Item', updated });
     } catch (error) {
-        res.status(500).json({ message: "Error in Updating Order Item", error: error.message });
+         handleError(res, error)
     }
 };
 
@@ -48,6 +48,6 @@ exports.deleteOrderItem = async (req, res) => {
 
         res.status(200).json({ message: 'Successfully Deleted Order Item' });
     } catch (error) {
-        res.status(500).json({ message: "Error in Deleting Order Item", error: error.message });
+         handleError(res, error)
     }
 };
