@@ -21,16 +21,16 @@ class OrderItems extends Model {
                 relation: Model.BelongsToOneRelation,
                 modelClass: Order,
                 join: {
-                    from: 'orderItems.orderId',
-                    to: 'orders.id'
+                    from: `${this.tableName}.orderId`,
+                    to: `${Order.tableName}.id`
                 }
             },
             menuItems: {
                 relation: Model.BelongsToOneRelation,
                 modelClass: MenuItems,
                 join: {
-                    from: 'orderItems.menuItemId',
-                    to: 'menuItems.id'
+                    from: `${this.tableName}.menuItemId`,
+                    to: `${MenuItems.tableName}.id`
                 }
             }
         }

@@ -35,8 +35,8 @@ class MenuItems extends Model {
                 relation: Model.BelongsToOneRelation,
                 modelClass: Restaurants,
                 join: {
-                    from: 'menuItems.restaurantId',
-                    to: 'restaurants.id'
+                    from: `${this.tableName}.restaurantId`,
+                    to: `${Restaurants.tableName}.id`
                 }
             }
         }
