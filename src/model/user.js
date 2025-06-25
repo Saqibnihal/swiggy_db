@@ -20,8 +20,8 @@ class User extends Model {
         relation: Model.HasManyRelation,
         modelClass: Order,
         join: {
-          from: "users.id",
-          to: "orders.userId",
+          from: `${this.tableName}.id"`,
+          to: `${Order.tableName}.userId`,
         },
       },
     };

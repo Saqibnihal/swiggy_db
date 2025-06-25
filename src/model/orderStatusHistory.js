@@ -37,16 +37,16 @@ class OrderStatusHistory extends Model {
                 relation: Model.BelongsToOneRelation,
                 modelClass: OrderStatuses,
                 join: {
-                    from: 'orderStatusHistory.statusId',
-                    to: 'orderStatuses.id'
+                    from: `${this.tableName}.statusId`,
+                    to: `${OrderStatuses.tableName}.id`
                 }
             },
             orders: {
                 relation: Model.BelongsToOneRelation,
                 modelClass: Orders,
                 join: {
-                    from: 'orderStatusHistory.orderId',
-                    to: 'orders.id'
+                    from: `${this.tableName}.orderId`,
+                    to: `${Orders.tableName}.id`
                 }
             }
         };

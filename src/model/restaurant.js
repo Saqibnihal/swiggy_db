@@ -35,16 +35,16 @@ class Restaurant extends Model {
                 relation: Model.HasManyRelation,
                 modelClass: MenuItem,
                 join: {
-                    from: 'restaurants.id',
-                    to: 'menuItems.restaurantId'
+                    from: `${this.tableName}.id`,
+                    to: `${MenuItem.tableName}.restaurantId`
                 }
             },
             orders: {
                 relation: Model.HasManyRelation,
                 modelClass: Order,
                 join: {
-                    from: 'restaurants.id',
-                    to: 'orders.restaurantId'
+                    from: `${this.tableName}.id`,
+                    to: `${Order.tableName}.restaurantId`
                 }
             }
         };

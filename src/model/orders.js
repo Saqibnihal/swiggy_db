@@ -23,32 +23,32 @@ class Order extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: User,
         join: {
-          from: 'orders.userId',
-          to: 'users.id'
+          from: `${this.tableName}.userId`,
+          to: `${User.tableName}.id`
         }
       },
       orderStatusHistory: {
         relation: Model.HasManyRelation,
         modelClass: OrderStatusHistory,
         join: {
-          from: 'orders.id',
-          to: 'orderStatusHistory.orderId'
+          from: `${this.tableName}.id`,
+          to: `${OrderStatusHistory.tableName}.orderId`
         }
       },
       restaurant: {
         relation: Model.BelongsToOneRelation,
         modelClass: Restaurant,
         join: {
-          from: 'orders.restaurantId',
-          to: 'restaurant.id'
+          from: `${this.tableName}.restaurantId`,
+          to: `${Restaurant.tableName}.id`
         }
       },
       orderStatus: {
         relation: Model.BelongsToOneRelation,
         modelClass: OrderStatus,
         join: {
-          from: 'orders.statusId',
-          to: 'orderStatuses.id'
+          from: `${this.tableName}.statusId`,
+          to: `${OrderStatus.tableName}.id`
         }
       }
     };

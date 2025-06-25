@@ -21,16 +21,16 @@ class OrderStatuses extends Model {
                 relation: Model.HasManyRelation,
                 modelClass: Order,
                 join: {
-                    from: 'orderStatuses.id',
-                    to: 'orders.statusId'
+                    from: `${this.tableName}.id`,
+                    to: `${Order.tableName}.statusId`
                 }
             },
             orderStatusHistories: {
                 relation: Model.HasManyRelation,
                 modelClass: orderStatusHistory,
                 join: {
-                    from: 'orderStatuses.id',
-                    to: 'orderStatusHistory.statusId'
+                    from: `${this.tableName}.id`,
+                    to: `${orderStatusHistory.tableName}.statusId`
                 }
             }
         }
