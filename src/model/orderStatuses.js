@@ -1,4 +1,5 @@
 const BaseModel = require("./constants/BaseModel");
+const { uuidField, string, number, timestamps } = require("./constants/type");
 class OrderStatuses extends BaseModel {
     static get tableName() {
         return 'orderStatuses'
@@ -34,12 +35,12 @@ class OrderStatuses extends BaseModel {
             type: 'object',
             required: ["code", "label", "orderIndex"],
             properties: {
-                id: { type: 'string', format: 'uuid' },
-                code: { type: 'string' },
-                label: { type: 'string' },
-                orderIndex: { type: 'number' },
-                created_at: { type: "string", format: "date-time" },
-                updated_at: { type: "string", format: "date-time" },
+                id: uuidField,
+                code: string,
+                label: string,
+                orderIndex: number,
+                created_at: timestamps,
+                updated_at: timestamps,
             }
         }
     }

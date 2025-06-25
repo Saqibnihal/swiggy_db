@@ -1,4 +1,5 @@
 const BaseModel = require("./constants/BaseModel");
+const { uuidField, string, timestamps } = require("./constants/type");
 class Restaurant extends BaseModel {
     static get tableName() {
         return 'restaurants'
@@ -9,19 +10,19 @@ class Restaurant extends BaseModel {
             type: 'object',
             required: ['name', 'location', 'isOpen'],
             properties: {
-                id: { type: 'string', format: 'uuid' },
-                name: { type: 'string' },
-                location:{type:'string'},
+                id: uuidField,
+                name: string,
+                location: string,
                 isOpen: { type: 'boolean' },
-                created_at: { type: "string", format: "date-time" },
-                updated_at: { type: "string", format: "date-time" },
+                created_at: timestamps,
+                updated_at: timestamps,
             }
         }
 
     }
 
     static get relationMappings() {
-        const MenuItem=require('./menuItems')
+        const MenuItem = require('./menuItems')
         const Order = require('./orders')
         return {
             menuItems: {

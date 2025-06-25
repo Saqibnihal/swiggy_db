@@ -1,4 +1,5 @@
 const BaseModel = require("./constants/BaseModel");
+const { uuidField, number, timestamps } = require("./constants/type");
 class Order extends BaseModel {
   static get tableName() {
     return 'orders';
@@ -48,21 +49,21 @@ class Order extends BaseModel {
     };
   }
 
-    static get jsonSchema() {
-        return {
-            type: 'object',
-            required: ["userId", "restaurantId", "statusId","totalAmount"],
-            properties: {
-                id: { type: 'string', format: 'uuid' },
-                userId: { type: 'string', format: 'uuid' },
-                restaurantId: { type: 'string', format: 'uuid' },
-                statusId: { type: 'string', format: 'uuid' },
-                totalAmount: { type: 'number' },
-                created_at: { type: "string", format: "date-time" },
-                updated_at: { type: "string", format: "date-time" },
-            }
-        }
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ["userId", "restaurantId", "statusId", "totalAmount"],
+      properties: {
+        id: uuidField,
+        userId: uuidField,
+        restaurantId: uuidField,
+        statusId: uuidField,
+        totalAmount: number,
+        created_at: timestamps,
+        updated_at: timestamps,
+      }
     }
+  }
 }
 
 

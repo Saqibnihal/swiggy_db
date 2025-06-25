@@ -1,4 +1,5 @@
 const BaseModel = require("./constants/BaseModel");
+const { uuidField, string, timestamps, number } = require("./constants/type");
 class MenuItems extends BaseModel {
     static get tableName() {
         return 'menuItems'
@@ -8,13 +9,13 @@ class MenuItems extends BaseModel {
             type: 'object',
             required: ['name', 'price', 'isAvailable'],
             properties: {
-                id: { type: 'string', format: 'uuid' },
-                name: { type: 'string' },
-                price: { type: 'number' },
+                id: uuidField,
+                name: string,
+                price: number,
                 isAvailable: { type: 'boolean' },
-                restaurantId: { type: 'string', format: 'uuid' },
-                created_at: { type: "string", format: "date-time" },
-                updated_at: { type: "string", format: "date-time" },
+                restaurantId: uuidField,
+                created_at: timestamps,
+                updated_at: timestamps,
             }
         }
 
