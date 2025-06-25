@@ -1,53 +1,73 @@
-const OrderItems = require('../../model/orderItems')
-const handleError = require("../utils/errorHandling");
+const { transaction } = require('objection');
+const Order = require('../../model/orders');
+const OrderItems = require('../../model/orderItems');
+const handleError = require('../../modules/utils/errorHandling');
 
-exports.getOrderItems = async (req, res) => {
-    try {
-        const orderData = await OrderItems.query();
-        res.status(200).json({ message: "Successfully Fetched Order Items", orderData })
-    } catch (error) {
-         handleError(res, error)
-    }
-}
+exports.placeOrder = async (req, res) => {
+  const { userId, restaurantId, statusId, items } = req.body;
 
-exports.createOrderItem = async (req, res) => {
-    const orderData = req.body;
-    if (!orderData.orderId || !orderData.menuItemId || !orderData.quantity || !orderData.itemPrice || !orderData.total) {
-        res.status(400).json({ message: 'Fill all the fields' })
-    }
-    try {
-        const datas = await OrderItems.query().insert(orderData)
-        res.status(200).json({ message: 'Successfully Created Order Items', datas })
-    } catch (error) {
-        handleError(res, error)
-    }
-}
+  try {
+    const totalAmount = items.reduce(
+      (sum, item) => sum + item.quantity * item.itemPrice,
+      0
+    );
 
-exports.updateOrderItem = async (req, res) => {
-    const { id } = req.params;
-    const updatedData = req.body;
-    try {
-        const updated = await OrderItems.query().patchAndFetchById(id, updatedData);
-        if (!updated) {
-            return res.status(404).json({ message: 'Order Item not found' });
-        }
-        res.status(200).json({ message: 'Successfully Updated Order Item', updated });
-    } catch (error) {
-         handleError(res, error)
-    }
+    const newOrder = await transaction(Order.knex(), async (trx) => {
+      // Insert the main order
+      const order = await Order.query(trx).insert({
+        userId,
+        restaurantId,
+        statusId,
+        totalAmount,
+      });
+
+      // Prepare order items
+      const orderItems = items.map((item) => ({
+        orderId: order.id,
+        menuItemId: item.menuItemId,
+        quantity: item.quantity,
+        itemPrice: item.itemPrice,
+      }));
+
+      // Insert into orderItems
+      await OrderItems.query(trx).insert(orderItems);
+
+      return order;
+    });
+
+    res.status(201).json({
+      message: 'Order placed successfully',
+      order: newOrder,
+    });
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
-exports.deleteOrderItem = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const deleted = await OrderItems.query().deleteById(id);
+exports.getOrderById = async (req, res) => {
+  try {
+    const order = await Order.query()
+      .findById(req.params.id)
+      .withGraphFetched('[user, restaurant, orderStatus, orderItems]');
 
-        if (deleted === 0) {
-            return res.status(404).json({ message: 'Order Item not found' });
-        }
-
-        res.status(200).json({ message: 'Successfully Deleted Order Item' });
-    } catch (error) {
-         handleError(res, error)
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
     }
+
+    res.status(200).json({ order });
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
+exports.getUserOrders = async (req, res) => {
+  try {
+    const orders = await Order.query()
+      .where('userId', req.params.userId)
+      .withGraphFetched('[restaurant, orderStatus, orderItems]');
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    handleError(res, error);
+  }
 };
