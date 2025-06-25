@@ -1,14 +1,7 @@
-const { Model } = require('objection')
-
-class OrderStatuses extends Model {
+const BaseModel = require("./constants/BaseModel");
+class OrderStatuses extends BaseModel {
     static get tableName() {
         return 'orderStatuses'
-    }
-
-    $beforeInsert() {
-        if (!this.id) {
-            this.id = uuidv4();
-        }
     }
 
     static get relationMappings() {
@@ -18,7 +11,7 @@ class OrderStatuses extends Model {
 
         return {
             orders: {
-                relation: Model.HasManyRelation,
+                relation: BaseModel.HasManyRelation,
                 modelClass: Order,
                 join: {
                     from: `${this.tableName}.id`,
@@ -26,7 +19,7 @@ class OrderStatuses extends Model {
                 }
             },
             orderStatusHistories: {
-                relation: Model.HasManyRelation,
+                relation: BaseModel.HasManyRelation,
                 modelClass: orderStatusHistory,
                 join: {
                     from: `${this.tableName}.id`,
