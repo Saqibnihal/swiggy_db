@@ -1,5 +1,5 @@
 const BaseModel = require("./constants/BaseModel");
-const { uuidField, string, timestamps } = require("./constants/type");
+const { uuidField, string, timestamps, boolean } = require("./constants/type");
 class Restaurant extends BaseModel {
     static get tableName() {
         return 'restaurants'
@@ -13,7 +13,7 @@ class Restaurant extends BaseModel {
                 id: uuidField,
                 name: string,
                 location: string,
-                isOpen: { type: 'boolean' },
+                isOpen: boolean,
                 created_at: timestamps,
                 updated_at: timestamps,
             }

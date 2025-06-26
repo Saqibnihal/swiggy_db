@@ -1,5 +1,5 @@
 const BaseModel = require("./constants/BaseModel");
-const { uuidField, string, timestamps } = require("./constants/type");
+const { uuidField, string, timestamps, phone, address } = require("./constants/type");
 class User extends BaseModel {
   static get tableName() {
     return "users";
@@ -28,15 +28,8 @@ class User extends BaseModel {
       properties: {
         id: uuidField,
         name: string,
-        phone: {
-          type: "string",
-          pattern: "^[0-9]{10,15}$",
-        },
-        address: {
-          type: "string",
-          minLength: 5,
-          maxLength: 300,
-        },
+        phone: phone,
+        address: address,
         created_at: timestamps,
         updated_at: timestamps,
       },
