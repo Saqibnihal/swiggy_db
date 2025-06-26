@@ -14,4 +14,9 @@ router.get('/user/:userId', orderController.getUserOrders);
 // cancel order biscut
 router.patch('/:id', orderController.updateOrder)
 
+// history update
+router.patch('/:id/update-status', orderController.updateOrderStatusByRestaurant)
+
+// user full history
+router.get('/:id/history', orderController.getFullhistoryOfUser)
 module.exports = router;

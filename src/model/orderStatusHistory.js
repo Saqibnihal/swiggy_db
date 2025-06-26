@@ -15,12 +15,12 @@ class OrderStatusHistory extends BaseModel {
     static get jsonSchema() {
         return {
             type: 'object',
-            required: ['orderId', 'statusId', 'changedBy', 'changedAt'],
+            required: ['orderId', 'statusId', 'changedBy'],
             properties: {
                 id: uuidField,
                 orderId: uuidField,
                 statusId: uuidField,
-                changedBy: { type: 'string', enum: ['system', 'restaurant'] },
+                changedBy: { type: 'string', enum: ['system', 'restaurants'] },
                 changedAt: timestamps
             }
         }
