@@ -11,4 +11,7 @@ router.get('/:id', orderController.getOrderById);
 // GET /orders/user/:userId - get all orders for a specific user
 router.get('/user/:userId', orderController.getUserOrders);
 
+// cancel order biscut
+router.patch('/:id', orderController.updateOrder)
+
 module.exports = router;
