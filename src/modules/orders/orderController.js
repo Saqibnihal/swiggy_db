@@ -2,43 +2,44 @@ const { transaction } = require('objection');
 const Order = require('../../model/orders');
 const OrderItems = require('../../model/orderItems');
 const handleError = require('../../modules/utils/errorHandling');
+const MenuItems = require('../../model/menuItems');
 
 exports.placeOrder = async (req, res) => {
   const { userId, restaurantId, statusId, items } = req.body;
-
   try {
-    const totalAmount = items.reduce(
-      (sum, item) => sum + item.quantity * item.itemPrice,
-      0
-    );
-
     const newOrder = await transaction(Order.knex(), async (trx) => {
-      // Insert the main order
+      const menuItemsFromDb = await MenuItems.query(trx).whereIn(
+        'id',
+        items.map(item => item.menuItemId)
+      );
+
+      const orderItems = items.map((item) => {
+        const dbItem = menuItemsFromDb.find(mi => mi.id === item.menuItemId)
+
+        if (!dbItem) {
+          throw new Error(`Menu item not found: ${item.menuItemId}`)
+        }
+        return {
+          menuItemId: item.menuItemId,
+          quantity: item.quantity,
+          itemPrice: dbItem.price,
+        };
+      });
+
+      const totalAmount = orderItems.reduce
+        ((sum, item) => sum + item.quantity * item.itemPrice, 0);
+
       const order = await Order.query(trx).insert({
         userId,
         restaurantId,
         statusId,
-        totalAmount,
-      });
-
-      // Prepare order items
-      const orderItems = items.map((item) => ({
-        orderId: order.id,
-        menuItemId: item.menuItemId,
-        quantity: item.quantity,
-        itemPrice: item.itemPrice,
-      }));
-
-      // Insert into orderItems
-      await OrderItems.query(trx).insert(orderItems);
-
-      return order;
-    });
-
-    res.status(201).json({
-      message: 'Order placed successfully',
-      order: newOrder,
-    });
+        totalAmount
+      })
+      res.status(200).json({
+        message:'orders done',
+        Order:order
+      })
+    })
   } catch (error) {
     handleError(res, error);
   }

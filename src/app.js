@@ -3,14 +3,15 @@ const express = require("express");
 const app = express();
 const orderRoutes = require("./modules/orders/orderRoutes");
 const restaurantRoutes = require('./modules/restaurants/restaurantRoutes')
-const menuItemsRoutes = require('./modules/menuItem/menuItemRoutes')
+const menuItemsRoutes = require('./modules/menuItem/menuItemRoutes');
+const userRouters = require('./modules/user/userRoutes');
 const PORT = 3000;
 
 app.use(express.json());
 app.use("/orders", orderRoutes);
 app.use("/restaurant", restaurantRoutes);
 app.use("/menuitems", menuItemsRoutes);
-
+app.use('/user', userRouters)
 app.listen(PORT, () => {
   console.log(`server starts at http://localhost:${PORT}`);
 });
