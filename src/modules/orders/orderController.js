@@ -4,6 +4,7 @@ const OrderItems = require('../../model/orderItems');
 const handleError = require('../../modules/utils/errorHandling');
 const MenuItems = require('../../model/menuItems');
 const OrderStatus = require('../../model/orderStatuses');
+const OrderStatusHistory = require('../../model/orderStatusHistory');
 
 
 exports.placeOrder = async (req, res) => {
@@ -50,6 +51,14 @@ exports.placeOrder = async (req, res) => {
         }))
       );
 
+      const state = changedBy || 'system'
+
+      await OrderStatusHistory.query(trx).insertGraph({
+        orderId: order.id,
+        statusId,
+        changedBy: state,
+
+      })
 
       return order;
 
@@ -81,27 +90,51 @@ exports.getOrderById = async (req, res) => {
 };
 
 exports.getUserOrders = async (req, res) => {
+  const { userId } = req.params;
   try {
     const orders = await Order.query()
-      .where('userId', req.params.userId)
+      .where('userId', userId)
       .withGraphFetched('[restaurant, orderStatus, orderItems]');
 
-    res.status(200).json({ orders });
+    res.status(200).json({ message: 'Thambi unnoda Past order pa', orders });
   } catch (error) {
     handleError(res, error);
   }
 };
 
+//view full history
+exports.getFullhistoryOfUser = async (req, res) => {
+  const { id: orderId } = req.params;
+  if (!orderId) {
+    return res.status(400).json({ message: "orderId is required in URL" });
+  }
+  try {
+    const history = await OrderStatusHistory.query()
+      .where('orderId', orderId)
+      .withGraphFetched('status')
+      .orderBy('changedAt');
+
+    res.status(200).json({
+      message: 'Order status history fetched',
+      history,
+    });
+
+  } catch (error) {
+    handleError(res, error);
+  }
+}
+
+
 exports.updateOrder = async (req, res) => {
-  const orderId  = req.params.id;
-  const {  restaurantId, statusId, items = [] } = req.body;
+  const orderId = req.params.id;
+  const { restaurantId, statusId, items = [] } = req.body;
 
   try {
     // Check if the order already exists
     const existingOrder = await Order.query().findById(orderId);
 
-    if(!existingOrder){
-      res.status(404).json({message:'please enter valid order id'})
+    if (!existingOrder) {
+      res.status(404).json({ message: 'please enter valid order id' })
     }
 
     if (existingOrder) {
@@ -148,7 +181,37 @@ exports.updateOrder = async (req, res) => {
 
       return res.status(200).json({ message: 'Order updated', order: updated });
     }
-    } catch (error) {
+  } catch (error) {
     handleError(res, error);
   }
 };
+
+// updateOrderStatusByRestaurants 
+exports.updateOrderStatusByRestaurant = async (req, res) => {
+  const { id: orderId } = req.params;
+  const { statusId, changedBy } = req.body;
+
+  try {
+    const result = Order.transaction(async trx => {
+
+      //inga order table la status update pannaporen
+      const updateOrder = await Order.query().patchAndFetchById(orderId, { statusId })
+      if (!updateOrder) throw new Error("Order not found");
+
+      // inga orderHistory la updated status create panren
+      const newHistory = await OrderStatusHistory.query(trx).insertAndFetch({
+        orderId,
+        statusId,
+        changedBy
+      });
+      return { updateOrder, newHistory }
+    });
+    res.status(201).json({
+      message: 'order status update Succesfully',
+      order: (await result).updateOrder,
+      statusHistory: (await result).newHistory
+    })
+  } catch (error) {
+    handleError(res, error);
+  }
+}
