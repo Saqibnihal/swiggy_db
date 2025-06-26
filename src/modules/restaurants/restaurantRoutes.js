@@ -1,5 +1,5 @@
 const express = require("express");
-const { getRestaurantWithMenu, getRestaurantWithMenuById, getRestaurantById, getRestaurants, updateRestaurants, createRestaurants, deleteRestaurant, getOpenRestaurants } = require("./restaurantController");
+const { getRestaurantWithMenu, getRestaurantWithMenuById, getRestaurantById, getRestaurants, updateRestaurants, createRestaurants, deleteRestaurant, getOpenRestaurants, getOrdersForRestaurant } = require("./restaurantController");
 const router = express.Router();
 
 
@@ -7,6 +7,7 @@ const router = express.Router();
 // router.get('/menuItems', getRestaurantWithMenu)
 // router.get('/menuItems/:id', getRestaurantWithMenuById)
 
+router.get('/:id/orders', getOrdersForRestaurant);
 router.post("/", createRestaurants);
 router.get("/", getRestaurants);
 router.get("/open", getOpenRestaurants);
